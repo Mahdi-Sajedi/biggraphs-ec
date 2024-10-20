@@ -92,7 +92,7 @@ void bfs_top_down(Graph graph, solution* sol) {
     }
 }
 
-bool bottom_up_step(Graph g, int* status, int* distances) {
+bool bottom_up_step(Graph g, int* distances) {
     bool final_step = true;
     for(int i=0; i<g->num_nodes; i++){
         if (distances[i] != NOT_VISITED_MARKER)
@@ -104,10 +104,10 @@ bool bottom_up_step(Graph g, int* status, int* distances) {
         for(int neighbor=start_edge; neighbor<end_edge; neighbor++){
             int incoming = g->incoming_edges[neighbor];
 
-            if (distances[neighbor] != NOT_VISITED_MARKER){
-                status[i] = distances[neighbor] + 1;
+            if (distances[incoming] != NOT_VISITED_MARKER){
+                distances[i] = distances[incoming] + 1;
                 final_step = false;
-                break;
+                break; // each node i is only updated once per iteration.
             }
         }
     }
@@ -123,9 +123,6 @@ void bfs_bottom_up(Graph graph, solution* sol)
     for (int i=0; i<graph->num_nodes; i++){
         sol->distances[i] = NOT_VISITED_MARKER;
     }
-    
-    //
-    int status[graph->num_nodes];
     sol->distances[ROOT_NODE_ID] = 0;
 
     int is_final_step = false;
@@ -135,8 +132,7 @@ void bfs_bottom_up(Graph graph, solution* sol)
         double start_time = CycleTimer::currentSeconds();
 #endif
 
-        // vertex_set_clear(new_frontier);
-        is_final_step = bottom_up_step(graph, status, sol->distances);
+        is_final_step = bottom_up_step(graph, sol->distances);
 
 #ifdef VERBOSE
         double end_time = CycleTimer::currentSeconds();
