@@ -64,7 +64,7 @@ void bfs_top_down(Graph graph, solution* sol) {
     vertex_set* new_frontier = &list2;
 
     // initialize all nodes to NOT_VISITED
-    for (int i=0; i<graph-num_nodes; i++)
+    for (int i=0; i<graph->num_nodes; i++)
         sol->distances[i] = NOT_VISITED_MARKER;
 
     // setup frontier with the root node
@@ -92,8 +92,55 @@ void bfs_top_down(Graph graph, solution* sol) {
     }
 }
 
+bool bottom_up_step(Graph g, int[] status, int* distances) {
+    bool final_step = true;
+    for(int i=0; i<g->num_nodes; i++){
+        if (distances[i] != NOT_VISITED_MARKER)
+            continue;
+        int start_edge = g->incoming_starts[i];
+        int end_edge = (i == g->num_nodes - 1 ? g->num_edges: g->incoming_starts[i+1]);
+
+        // attempt to find an incoming edge to i whose other endpoint is discovered
+        for(int neighbor=start_edge; neighbor<end_edge; neighbor++){
+            int incoming = g->incoming_edges[neighbor];
+
+            if (distances[neighbor] != NOT_VISITED_MARKER){
+                status[i] = distances[neighbor] + 1;
+                final_step = false;
+                break;
+            }
+        }
+    }
+    return final_step;
+}
+
 void bfs_bottom_up(Graph graph, solution* sol)
 {
     // refer to handout for details
-    // you can implement bottom_up_step() if see fit
+    // you can implement bottom_up_step() if see fit 
+
+    // initialize all nodes to NOT_VISITED;
+    for (int i=0; i<graph->num_nodes; i++){
+        sol->distances[i] = NOT_VISITED_MARKER;
+    }
+    
+    //
+    int status[graph->num_nodes];
+    sol->distances[ROOT_NODE_ID] = 0;
+
+    int is_final_step = false;
+    while (!is_final_step){
+
+#ifdef VERBOSE
+        double start_time = CycleTimer::currentSeconds();
+#endif
+
+        // vertex_set_clear(new_frontier);
+        is_final_step = bottom_up_step(graph, status, sol->distances);
+
+#ifdef VERBOSE
+        double end_time = CycleTimer::currentSeconds();
+        printf("are we done? %-10s %.4f sec\n", is_final_step? "true": "false", end_time - start_time);
+#endif
+    }
 }
