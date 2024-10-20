@@ -19,7 +19,7 @@ void vertex_set_clear(vertex_set* list) {
 void vertex_set_init(vertex_set* list, int count) {
     list->max_vertices = count;
     list->vertices = (int*)malloc(sizeof(int) * list->max_vertices);
-    vertex_set_clear(list);
+    vertex_set_clear(list); // do not ignore this step! 
 }
 
 // Take one step of "top-down" BFS. For each vertex on the frontier,
