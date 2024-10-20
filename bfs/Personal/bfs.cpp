@@ -92,7 +92,7 @@ void bfs_top_down(Graph graph, solution* sol) {
     }
 }
 
-bool bottom_up_step(Graph g, int[] status, int* distances) {
+bool bottom_up_step(Graph g, int* status, int* distances) {
     bool final_step = true;
     for(int i=0; i<g->num_nodes; i++){
         if (distances[i] != NOT_VISITED_MARKER)
