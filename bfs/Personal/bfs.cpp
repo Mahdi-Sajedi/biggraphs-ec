@@ -140,3 +140,11 @@ void bfs_bottom_up(Graph graph, solution* sol)
 #endif
     }
 }
+
+
+void bfs_hybrid(Graph graph, solution* sol)
+{
+    // see https://github.com/shejialuo/CS149-fall21/blob/master/asst4/bfs/bfs.cpp
+    
+    
+}
